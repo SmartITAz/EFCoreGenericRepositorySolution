@@ -1,0 +1,204 @@
+﻿<html>
+<head>
+  <title>SmartIT Blog Manager</title>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+          integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+          crossorigin="anonymous"></script>
+
+  <script>
+
+    $(document).ready(function () {
+      getBlogList();
+    });
+
+    var Blog = {
+      blogId: 0,
+      title: "",
+      createdBy: "",
+      createdOn: "",
+      updatedBy: "",
+      updatedOn: ""
+    }
+
+    // Get all blogs to display
+    function getBlogList() {
+      // Call Web API to get a list of blogs
+      $.ajax({
+        url: '/api/GetBlogs/',
+        type: 'GET',
+        dataType: 'json',
+        success: function (blogs) {
+          blogListSuccess(blogs);
+        },
+        error: function (request, message, error) {
+          handleException(request, message, error);
+        }
+      });
+    }
+
+    // Display all blogs returned from Web API call
+    function blogListSuccess(blogs) {
+      // Iterate over the collection of data
+      $("#blogTable tbody").remove();
+      $.each(blogs, function (index, blog) {
+        // Add a row to the blog table
+        blogAddRow(blog);
+      });
+    }
+
+    // Add blog row to <table>
+    function blogAddRow(blog) {
+      // First check if a <tbody> tag exists, add one if not
+      if ($("#blogTable tbody").length == 0) {
+        $("#blogTable").append("<tbody></tbody>");
+      }
+
+      // Append row to <table>
+      $("#blogTable tbody").append(
+        blogBuildTableRow(blog));
+    }
+
+    // Build a <tr> for a row of table data
+    function blogBuildTableRow(blog) {
+      var newRow = "<tr>" +
+        "<td>" + blog.blogId + "</td>" +
+        "<td><input   class='input-title' type='text' value='" + blog.title + "'/></td>" +
+        "<td><label   >" + blog.createdBy + "</label></td>" +
+        "<td><label   >" + blog.createdOn + "</label></td>" +
+        "<td><label   >" + blog.updatedBy + "</label></td>" +
+        "<td><label   >" + blog.updatedOn + "</label></td>" +
+        "<td>" +
+        "<button type='button' " +
+        "onclick='blogUpdate(this);' " +
+        "class='btn btn-default' " +
+        "data-id='" + blog.blogId + "' " +
+        //"data-name='" + blog.name + "' " +
+        //"data-gender='" + blog.gender + "' " +
+        //"data-salary='" + blog.salary + "' " +
+        ">" +
+        "<span class='glyphicon glyphicon-edit' /> Update" +
+        "</button> " +
+        " <button type='button' " +
+        "onclick='blogDelete(this);'" +
+        "class='btn btn-default' " +
+        "data-id='" + blog.blogId + "'>" +
+        "<span class='glyphicon glyphicon-remove' />Delete" +
+        "</button>" +
+        "</td>" +
+        "</tr>";
+
+      return newRow;
+    }
+
+    function onAddBlog(item) {
+      var options = {};
+      options.url = "/api/AddBlog";
+      options.type = "POST";
+      var obj = Blog;
+      obj.title = $("#title").val();
+      //obj.gender = $("#gender").val();
+      //obj.salary = $("#salary").val();
+      console.log('in onAddBlog');
+      console.dir(obj);
+      options.data = JSON.stringify(obj);
+      options.contentType = "application/json";
+      options.dataType = "html";
+
+      options.success = function (msg) {
+        getBlogList();
+        $("#msg").html(msg);
+        $("#title").val("");
+      },
+        options.error = function () {
+          $("#msg").html("Error while calling the Web API!");
+        };
+      $.ajax(options);
+    }
+
+    function blogUpdate(item) {
+      var id = $(item).data("id");
+      var options = {};
+      options.url = "/api/UpdateBlog/"
+      options.type = "PUT";
+
+      var obj = Blog;
+      obj.blogId = id;
+      obj.title = $(".input-title", $(item).parent().parent()).val();
+      //obj.gender = $(".input-gender", $(item).parent().parent()).val();
+      //obj.salary = $(".input-salary", $(item).parent().parent()).val();
+      console.log("blogUpdate id: " +id);
+      console.dir(obj);
+      options.data = JSON.stringify(obj);
+      options.contentType = "application/json";
+      options.dataType = "html";
+      options.success = function (msg) {
+        getBlogList();
+        $("#msg").html(msg);
+      };
+      options.error = function () {
+        $("#msg").html("Error while calling the Web API!");
+      };
+      $.ajax(options);
+    }
+
+    function blogDelete(item) {
+      var id = $(item).data("id");
+      var options = {};
+      options.url = "/api/DeleteBlog/"
+        + id;
+      options.type = "DELETE";
+      options.dataType = "html";
+      options.success = function (msg) {
+        console.log('msg= ' + msg);
+        $("#msg").html(msg);
+        getBlogList();
+      };
+      options.error = function () {
+        $("#msg").html("Error while calling the Web API!");
+      };
+      $.ajax(options);
+    }
+
+    // Handle exceptions from AJAX calls
+    function handleException(request, message, error) {
+      var msg = "";
+      msg += "Code: " + request.status + "\n";
+      msg += "Text: " + request.statusText + "\n";
+      if (request.responseJSON != null) {
+        msg += "Message" + request.responseJSON.Message + "\n";
+      }
+
+      alert(msg);
+    }
+  </script>
+</head>
+<body>
+  <h3>Blog Manager</h3>
+  <form>
+    <table id="blogTable" class="table" style="border: 1px solid #999" cellpadding="1">
+      <thead>
+        <tr style="border: 1px solid #999" cellpadding="1">
+          <td>Id </td>
+          <td> Title </td>
+          <td> CreatedBy </td>
+          <td> CreatedOn </td>
+          <td> UpdatedBy </td>
+          <td> UpdatedOn </td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input id="title" type="text" /></td>
+          <td><input type="button" id="insert" value="Insert" onclick='onAddBlog(this)' /></td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+      </thead>
+    </table>
+    <br />
+    <div id="msg"></div>
+  </form>
+</body>
+</html>

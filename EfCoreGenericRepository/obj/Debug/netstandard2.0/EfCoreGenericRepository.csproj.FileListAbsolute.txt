@@ -1,0 +1,9 @@
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\obj\Debug\netstandard2.0\EfCoreGenericRepository.csprojResolveAssemblyReference.cache
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\obj\Debug\netstandard2.0\EfCoreGenericRepository.csproj.CoreCompileInputs.cache
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\obj\Debug\netstandard2.0\EfCoreGenericRepository.AssemblyInfoInputs.cache
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\obj\Debug\netstandard2.0\EfCoreGenericRepository.AssemblyInfo.cs
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\bin\Debug\netstandard2.0\EfCoreGenericRepository.deps.json
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\bin\Debug\netstandard2.0\EfCoreGenericRepository.dll
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\bin\Debug\netstandard2.0\EfCoreGenericRepository.pdb
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\obj\Debug\netstandard2.0\EfCoreGenericRepository.dll
+E:\Repos\EFCoreGenericRepositorySolution\EfCoreGenericRepository\obj\Debug\netstandard2.0\EfCoreGenericRepository.pdb
